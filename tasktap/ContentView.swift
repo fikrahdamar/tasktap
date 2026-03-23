@@ -13,7 +13,12 @@ struct ContentView: View {
     @Query private var items: [Item]
 
     var body: some View {
-       
+        TabView {
+            Text("hello swift")
+                .tabItem {
+                    Label("Tasks", systemImage: "list.bullet")
+                }
+        }
     }
 }
 
