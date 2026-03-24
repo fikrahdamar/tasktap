@@ -47,8 +47,7 @@ final class TaskItem: Equatable {
     var repeatEndDate: Date?
     var originalDeadline: Date
 
-    /// blm kutambahin ntaran
-    ///    var category: TaskCategory
+    var category: TaskCategory?
     @Attribute(.externalStorage) var attachment: Data?
 
     init(title: String,
@@ -68,16 +67,16 @@ final class TaskItem: Equatable {
         self.priority = priority
         self.deadline = deadline
         self.notes = notes
-        
+
         self.isCompleted = isCompleted
         self.createdAt = .now
-        
+
         self.originalDeadline = deadline
         self.repeatFrequency = repeatFrequency
         self.repeatInterval = repeatInterval
         self.attachment = attachment
-        
-        if repeatFrequency != .none && repeatEndDate == nil {
+
+        if repeatFrequency != .none, repeatEndDate == nil {
             self.repeatEndDate = Calendar.current.date(byAdding: .year, value: 1, to: deadline)
         } else {
             self.repeatEndDate = repeatEndDate
