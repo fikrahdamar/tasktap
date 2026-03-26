@@ -10,12 +10,23 @@ import SwiftUI
 struct CustomTabBar: View {
     @Binding var selectedTab: Tab
     var onPlusClick: () -> Void
-
+    @Namespace private var tabAnimation
+    private let itemWidth: CGFloat = 60
+    
     var body: some View {
         HStack(spacing: 20) {
-            HStack(spacing: 0) {
-                ForEach(Tab.allCases) { tab in
-                    tabButton(tab: tab)
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.black)
+                    .frame(width: itemWidth, height: 60)
+                    .offset(x: CGFloat(Tab.allCases.firstIndex(of: selectedTab) ?? 0) * itemWidth)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: selectedTab)
+                    .frame(height: 60)
+
+                HStack(spacing: 0) {
+                    ForEach(Tab.allCases) { tab in
+                        tabButton(tab: tab)
+                    }
                 }
             }
             .background(Color.white)
@@ -48,7 +59,6 @@ struct CustomTabBar: View {
                 .font(.system(size: 20))
                 .frame(width: 60, height: 60)
                 .foregroundColor(selectedTab == tab ? .white : .black)
-                .background(selectedTab == tab ? Color.black : Color.white)
         }
     }
 }
@@ -57,8 +67,6 @@ struct CustomTabBar: View {
     ZStack {
         Color.gray.opacity(0.2).ignoresSafeArea()
 
-        CustomTabBar(selectedTab: .constant(.home)) {
-            print("Plus clicked!")
-        }
+        CustomTabBar(selectedTab: .constant(.home)) {}
     }
 }

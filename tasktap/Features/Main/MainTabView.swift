@@ -28,7 +28,6 @@ struct MainTabView: View {
                 showingAddTask = true
             }
         }
-        
         .sheet(isPresented: $showingAddTask) {
             Text("Add Task View Here")
         }
