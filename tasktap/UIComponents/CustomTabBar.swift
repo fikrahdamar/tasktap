@@ -10,25 +10,35 @@ import SwiftUI
 struct CustomTabBar: View {
     @Binding var selectedTab: Tab
     var onPlusClick: () -> Void
-    @Namespace private var tabAnimation
-    private let itemWidth: CGFloat = 60
-    
+
+    @State private var tabWidths: [Tab: CGFloat] = [:]
+    private func offsetForTab(_ tab: Tab) -> CGFloat {
+        let allCases = Tab.allCases
+        guard let index = allCases.firstIndex(of: tab) else { return 0 }
+        return allCases.prefix(index).reduce(0) { $0 + (tabWidths[$1] ?? 0) }
+    }
+
     var body: some View {
         HStack(spacing: 20) {
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color.black)
-                    .frame(width: itemWidth, height: 60)
-                    .offset(x: CGFloat(Tab.allCases.firstIndex(of: selectedTab) ?? 0) * itemWidth)
+                    .frame(width: tabWidths[selectedTab] ?? 0, height: 60)
+                    .offset(x: offsetForTab(selectedTab))
                     .animation(.spring(response: 0.35, dampingFraction: 0.8), value: selectedTab)
-                    .frame(height: 60)
 
                 HStack(spacing: 0) {
                     ForEach(Tab.allCases) { tab in
                         tabButton(tab: tab)
+                            .onGeometryChange(for: CGFloat.self) { proxy in
+                                proxy.size.width
+                            } action: { newWidth in
+                                tabWidths[tab] = newWidth
+                            }
                     }
                 }
             }
+            .fixedSize() 
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
