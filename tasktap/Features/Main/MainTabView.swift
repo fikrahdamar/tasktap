@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab: Tab = .home
+    @State private var selectedTab: Tab = .focus
     @State private var showingAddTask = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
             Group {
                 switch selectedTab {
-                case .home: HomeView()
-                case .stats: HomeView()
-                case .calendar:  HomeView()
-                case .profile:  HomeView()
+                case .focus: FocusView()
+                case .discipline: DisciplineView()
+                case .ritual:  RitualView()
+                case .identity:  IdentityView()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -29,7 +29,7 @@ struct MainTabView: View {
             }
         }
         .sheet(isPresented: $showingAddTask) {
-            Text("Add Task View Here")
+            AddTaskView()
         }
     }
 }

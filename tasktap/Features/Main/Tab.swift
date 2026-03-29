@@ -8,19 +8,28 @@
 import Foundation
 
 enum Tab: String, CaseIterable, Identifiable {
-    case home
-    case stats
-    case calendar
-    case profile
+    case focus
+    case discipline
+    case ritual
+    case identity
     
     var id: String { self.rawValue }
     
     var iconName: String {
         switch self {
-        case .home: return "house"
-        case .stats: return "chart.bar"
-        case .calendar: return "calendar"
-        case .profile: return "person"
+        case .focus: return "circle.hexagonpath"
+        case .discipline: return "chart.bar.horizontal.page"
+        case .ritual: return "calendar"
+        case .identity: return "medal.star"
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .focus: return "Focus"
+        case .discipline: return "Discipline"
+        case .ritual: return "Ritual"
+        case .identity: return "Identity"
         }
     }
 }

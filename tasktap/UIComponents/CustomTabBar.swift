@@ -12,6 +12,8 @@ struct CustomTabBar: View {
     var onPlusClick: () -> Void
 
     @State private var tabWidths: [Tab: CGFloat] = [:]
+    @State private var barHeight: CGFloat = 0
+
     private func offsetForTab(_ tab: Tab) -> CGFloat {
         let allCases = Tab.allCases
         guard let index = allCases.firstIndex(of: tab) else { return 0 }
@@ -19,56 +21,76 @@ struct CustomTabBar: View {
     }
 
     var body: some View {
-        HStack(spacing: 20) {
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.black)
-                    .frame(width: tabWidths[selectedTab] ?? 0, height: 60)
-                    .offset(x: offsetForTab(selectedTab))
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: selectedTab)
+        GeometryReader { geo in
+            let tabSize = geo.size.width * 0.18
+            let plusSize = geo.size.width * 0.15
+            let iconSize = tabSize * 0.3
+            let textSize = tabSize * 0.16
 
-                HStack(spacing: 0) {
-                    ForEach(Tab.allCases) { tab in
-                        tabButton(tab: tab)
-                            .onGeometryChange(for: CGFloat.self) { proxy in
-                                proxy.size.width
-                            } action: { newWidth in
-                                tabWidths[tab] = newWidth
-                            }
+            HStack(spacing: geo.size.width * 0.04) {
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color.black)
+                        .frame(width: tabWidths[selectedTab] ?? 0, height: barHeight)
+                        .offset(x: offsetForTab(selectedTab))
+                        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: selectedTab)
+
+                    HStack(spacing: 0) {
+                        ForEach(Tab.allCases) { tab in
+                            tabButton(tab: tab, tabSize: tabSize, iconSize: iconSize, textSize: textSize)
+                                .onGeometryChange(for: CGFloat.self) { proxy in
+                                    proxy.size.width
+                                } action: { newWidth in
+                                    tabWidths[tab] = newWidth
+                                }
+                        }
+                    }
+                }
+                .fixedSize()
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.size.height
+                } action: { newHeight in
+                    barHeight = newHeight
+                }
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 25))
+                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+
+                Button(action: onPlusClick) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: plusSize, height: plusSize)
+                            .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+
+                        Image(systemName: "plus")
+                            .font(.system(size: plusSize * 0.45, weight: .light))
+                            .foregroundColor(.black)
                     }
                 }
             }
-            .fixedSize() 
-            .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
-
-            Button(action: onPlusClick) {
-                ZStack {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 60, height: 60)
-                        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
-
-                    Image(systemName: "plus")
-                        .font(.system(size: 30, weight: .light))
-                        .foregroundColor(.black)
-                }
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom, 30)
         }
-        .padding(.bottom, 30)
+        .frame(height: 120)
     }
 
-    func tabButton(tab: Tab) -> some View {
+    func tabButton(tab: Tab, tabSize: CGFloat, iconSize: CGFloat, textSize: CGFloat) -> some View {
         Button {
             withAnimation(.spring()) {
                 selectedTab = tab
             }
         } label: {
-            Image(systemName: tab.iconName)
-                .font(.system(size: 20))
-                .frame(width: 60, height: 60)
-                .foregroundColor(selectedTab == tab ? .white : .black)
+            VStack(spacing: 4) {
+                Image(systemName: tab.iconName)
+                    .font(.system(size: iconSize))
+                    .imageScale(.medium)
+                    .frame(width: iconSize, height: iconSize)
+                Text(tab.title)
+                    .font(.system(size: textSize, weight: .medium))
+            }
+            .frame(width: tabSize, height: tabSize)
+            .foregroundColor(selectedTab == tab ? .white : .black)
         }
     }
 }
@@ -77,6 +99,6 @@ struct CustomTabBar: View {
     ZStack {
         Color.gray.opacity(0.2).ignoresSafeArea()
 
-        CustomTabBar(selectedTab: .constant(.home)) {}
+        CustomTabBar(selectedTab: .constant(.focus)) {}
     }
 }
