@@ -16,3 +16,7 @@ DerivedData/
 xcuserdata/
 DerivedData/
 *.xcuserstate
+
+#Claude helper
+TaskTap_ProjectPlan.md
+Claude.md
