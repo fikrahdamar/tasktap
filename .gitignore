@@ -14,9 +14,39 @@ DerivedData/
 
 # Xcode User Data
 xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+
 DerivedData/
 *.xcuserstate
 
 #Claude helper
 TaskTap_ProjectPlan.md
 Claude.md
+
+timeline.xctimeline
+playground.xcworkspace
+
+# User-specific data inside Xcode project/workspace bundles
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# --------------------------------------------------
+# Fastlane generated artifacts
+# --------------------------------------------------
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# --------------------------------------------------
+# Editor / temporary files
+# --------------------------------------------------
+*.swp
+*.lock
