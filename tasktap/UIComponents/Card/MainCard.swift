@@ -29,8 +29,10 @@ struct MainCard: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Refactor Identity Module")
                             .font(Font.custom("Inter-Bold", size: 18))
+                            .foregroundStyle(Color.defaultText)
                         Text("Clean up the core authentication logic for the next sprint.")
                             .font(Font.custom("Inter-Regular", size: 14))
+                            .foregroundStyle(Color.defaultText)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -41,6 +43,7 @@ struct MainCard: View {
                                
                         }
                         .font(Font.custom("Inter-bold", size: 12))
+                        .foregroundStyle(Color.greyDarkText)
                         HStack {
                             Image(systemName: "exclamationmark")
                             Text("High Priority")
@@ -48,7 +51,7 @@ struct MainCard: View {
                         .font(Font.custom("Inter-bold", size: 12))
                         .bold()
                         Spacer()
-                    }.foregroundStyle(Color.greyText)
+                    }.foregroundStyle(Color.greyDarkText)
                 }
                 .padding(.horizontal, 25)
                 .padding(.vertical, 20)
@@ -56,7 +59,7 @@ struct MainCard: View {
             }
             .fixedSize(horizontal: false, vertical: true)
             .frame(width: geo.size.width * 0.90)
-            .background(Color.white)
+            .background(Color.card)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
