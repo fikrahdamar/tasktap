@@ -9,8 +9,15 @@ import SwiftUI
 
 private typealias Tokens = DesignTokens
 
+// MARK: - Custom Tab Bar
+
+/// Bottom navigation bar with 4 tabs and floating action button.
+/// Features animated pill-style tab indicator and glassmorphic design.
+/// Displays: Focus, Discipline, Ritual, Identity tabs + centered FAB.
 struct CustomTabBar: View {
+    /// Currently selected tab
     @Binding var selectedTab: Tab
+    /// Callback when FAB (+) button is tapped
     var onPlusClick: () -> Void
 
     @State private var tabWidths: [Tab: CGFloat] = [:]
@@ -77,7 +84,15 @@ struct CustomTabBar: View {
         .frame(height: Tokens.TabBar.height)
     }
 
-    func tabButton(tab: Tab, tabSize: CGFloat, iconSize: CGFloat, textSize: CGFloat) -> some View {
+    // MARK: - Helper
+
+    /// Builds individual tab button with icon and label.
+    /// - Parameters:
+    ///   - tab: The Tab to render
+    ///   - tabSize: Square size for the button frame
+    ///   - iconSize: Size for the SF Symbol icon
+    ///   - textSize: Font size for the tab label
+    private func tabButton(tab: Tab, tabSize: CGFloat, iconSize: CGFloat, textSize: CGFloat) -> some View {
         Button {
             withAnimation(.spring()) {
                 selectedTab = tab

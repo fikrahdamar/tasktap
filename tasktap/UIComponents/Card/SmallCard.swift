@@ -9,6 +9,11 @@ import SwiftUI
 
 private typealias Tokens = DesignTokens
 
+// MARK: - Small Card
+
+/// Compact card for overdue or urgent tasks.
+/// Displays task with red accent bar, status label, and due time.
+/// Typically used in Focus view for "Urgent Tasks" bento grid (2-column layout).
 struct SmallCard: View {
     var body: some View {
         GeometryReader { geo in

@@ -9,6 +9,11 @@ import SwiftUI
 
 private typealias Tokens = DesignTokens
 
+// MARK: - Main Card
+
+/// Large editorial card for high-priority or featured tasks.
+/// Displays task with left accent bar, title, description, and metadata.
+/// Typically used in Focus view for "Priority Focus" section.
 struct MainCard: View {
     var body: some View {
         GeometryReader { geo in

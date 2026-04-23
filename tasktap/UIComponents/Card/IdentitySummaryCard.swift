@@ -9,6 +9,11 @@ import SwiftUI
 
 private typealias Tokens = DesignTokens
 
+// MARK: - Identity Summary Card
+
+/// Small stat badge displaying a single metric (streak, level, rituals, etc.).
+/// Shows icon, value, and label in a compact card format.
+/// Used in Identity screen stats bento grid.
 struct IdentitySummaryCard: View {
     var body: some View {
         GeometryReader { geo in

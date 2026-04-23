@@ -1,29 +1,54 @@
 import SwiftUI
 
-// MARK: - Enums
+// MARK: - Button Styles
 
+/// Visual style variants for ActionButton.
 enum ActionButtonStyle {
-    case primary      // Black background, white text
-    case secondary    // Light grey background, dark text
-    case tertiary     // Outlined, colored text & border
+    /// Black background with white text (primary action)
+    case primary
+    /// Light grey background with dark text (secondary action)
+    case secondary
+    /// Outlined style with colored border and text (destructive/tertiary action)
+    case tertiary
 }
 
+// MARK: - Icon Position
+
+/// Icon placement relative to button text.
 enum IconPosition {
+    /// Icon appears before text
     case left
+    /// Icon appears after text
     case right
+    /// No icon displayed
     case none
 }
 
+// MARK: - Action Button
+
+/// Reusable button component with flexible styling, sizing, and icon support.
+/// Supports three styles (primary, secondary, tertiary) with optional SF Symbol icons.
+/// Usage: `ActionButton(title: "Save", action: { ... }, style: .primary, iconName: "checkmark")`
 struct ActionButton: View {
+    /// Button label text
     let title: String
+    /// Closure executed when button is tapped
     let action: () -> Void
+    /// Visual style (primary, secondary, or tertiary)
     let style: ActionButtonStyle
+    /// SF Symbol name for optional icon
     let iconName: String?
+    /// Icon placement (left, right, or none)
     let iconPosition: IconPosition
+    /// If true, button expands to fill available width
     let fullWidth: Bool
+    /// Custom text color (overrides style default)
     let textColor: Color?
+    /// Custom background color (overrides style default)
     let backgroundColor: Color?
+    /// Custom border color (overrides style default)
     let borderColor: Color?
+    /// Button height in points
     let height: CGFloat
 
     init(
