@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private typealias Tokens = DesignTokens
+
 struct CustomTabBar: View {
     @Binding var selectedTab: Tab
     var onPlusClick: () -> Void
@@ -22,14 +24,14 @@ struct CustomTabBar: View {
 
     var body: some View {
         GeometryReader { geo in
-            let tabSize = geo.size.width * 0.18
-            let plusSize = geo.size.width * 0.15
+            let tabSize = geo.size.width * Tokens.TabBar.tabSizePercent
+            let plusSize = geo.size.width * Tokens.TabBar.plusSizePercent
             let iconSize = tabSize * 0.3
             let textSize = tabSize * 0.16
 
-            HStack(spacing: geo.size.width * 0.04) {
+            HStack(spacing: geo.size.width * Tokens.TabBar.spacingPercent) {
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 25)
+                    RoundedRectangle(cornerRadius: Tokens.Radius.tabBar)
                         .fill(Color.black)
                         .frame(width: tabWidths[selectedTab] ?? 0, height: barHeight)
                         .offset(x: offsetForTab(selectedTab))
@@ -53,15 +55,15 @@ struct CustomTabBar: View {
                     barHeight = newHeight
                 }
                 .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+                .clipShape(RoundedRectangle(cornerRadius: Tokens.Radius.tabBar))
+                .shadow(color: Tokens.Shadow.color, radius: Tokens.Shadow.radius, x: Tokens.Shadow.x, y: Tokens.Shadow.y)
 
                 Button(action: onPlusClick) {
                     ZStack {
                         Circle()
                             .fill(Color.white)
                             .frame(width: plusSize, height: plusSize)
-                            .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+                            .shadow(color: Tokens.Shadow.color, radius: Tokens.Shadow.radius, x: Tokens.Shadow.x, y: Tokens.Shadow.y)
 
                         Image(systemName: "plus")
                             .font(.system(size: plusSize * 0.45, weight: .light))
@@ -70,9 +72,9 @@ struct CustomTabBar: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-            .padding(.bottom, 30)
+            .padding(.bottom, Tokens.TabBar.bottomPadding)
         }
-        .frame(height: 120)
+        .frame(height: Tokens.TabBar.height)
     }
 
     func tabButton(tab: Tab, tabSize: CGFloat, iconSize: CGFloat, textSize: CGFloat) -> some View {

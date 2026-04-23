@@ -7,24 +7,26 @@
 
 import SwiftUI
 
+private typealias Tokens = DesignTokens
+
 struct IdentitySummaryCard: View {
     var body: some View {
         GeometryReader { geo in
-            VStack (alignment: .leading, spacing: 14){
+            VStack(alignment: .leading, spacing: Tokens.Spacing.md) {
                 Image(systemName: "flame")
                     .foregroundStyle(Color.redIconAccent)
                 Text("14 Days")
                     .foregroundStyle(Color.defaultText)
-                    .font(Font.custom("Inter-bold", size: 24))
+                    .font(.inter(.bold, size: 24))
                 Text("Current Streak".uppercased())
                     .foregroundStyle(Color.greyText)
-                    .font(Font.custom("Inter-Bold", size: 12))
+                    .font(.inter(.bold, size: Tokens.Font.categoryLabel))
             }
-            .padding(20)
+            .padding(Tokens.Card.identityCardPadding)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(width: geo.size.width * 0.45)
+            .frame(width: geo.size.width * Tokens.Card.identityCardWidth)
             .background(Color.card)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .clipShape(RoundedRectangle(cornerRadius: Tokens.Radius.card))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }

@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - Enums
+
 enum ActionButtonStyle {
     case primary      // Black background, white text
     case secondary    // Light grey background, dark text
@@ -61,8 +63,8 @@ struct ActionButton: View {
         if let backgroundColor = backgroundColor { return backgroundColor }
         switch style {
         case .primary: return .black
-        case .secondary: return Color(red: 0.92, green: 0.92, blue: 0.92)
-        case .tertiary: return Color(red: 0.98, green: 0.94, blue: 0.94)
+        case .secondary: return Color(.sRGBLinear, red: 0.92, green: 0.92, blue: 0.92, opacity: 1.0)
+        case .tertiary: return Color(.sRGBLinear, red: 0.98, green: 0.94, blue: 0.94, opacity: 1.0)
         }
     }
 
@@ -81,28 +83,28 @@ struct ActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
+            HStack(spacing: DesignTokens.Button.iconSpacing) {
                 if iconPosition == .left, let iconName = iconName {
                     Image(systemName: iconName)
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.system(size: DesignTokens.Button.iconSize, weight: .medium))
                 }
 
                 Text(title)
-                    .font(Font.custom("Inter-Medium", size: 16))
+                    .font(.inter(.medium, size: DesignTokens.Button.fontSize))
 
                 if iconPosition == .right, let iconName = iconName {
                     Image(systemName: iconName)
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.system(size: DesignTokens.Button.iconSize, weight: .medium))
                 }
             }
             .foregroundColor(computedTextColor)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .frame(height: height)
             .background(computedBackgroundColor)
-            .cornerRadius(16)
+            .cornerRadius(DesignTokens.Radius.button)
             .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(computedBorderColor, lineWidth: hasBorder ? 2 : 0)
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.button)
+                    .stroke(computedBorderColor, lineWidth: hasBorder ? DesignTokens.Button.borderWidth : 0)
             )
         }
     }
@@ -145,3 +147,5 @@ struct ActionButton: View {
     .padding()
     .background(Color.gray.opacity(0.1))
 }
+
+// Preview builds fine since DesignTokens is visible in preview target

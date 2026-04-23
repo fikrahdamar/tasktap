@@ -7,31 +7,33 @@
 
 import SwiftUI
 
+private typealias Tokens = DesignTokens
+
 struct MainCard: View {
     var body: some View {
         GeometryReader { geo in
             HStack {
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: Tokens.AccentBar.cornerRadius)
                     .fill(Color.brownAccent)
-                    .frame(width: 6)
+                    .frame(width: Tokens.AccentBar.width)
 
-                VStack(spacing: 30) {
-                    
+                VStack(spacing: Tokens.Spacing.section) {
+
                     HStack {
                         Text("DEEP WORK")
                         Spacer()
                         Image(systemName: "circle.circle")
                     }
-                    .font(Font.custom("Inter-Medium", size: 12))
+                    .font(.inter(.medium, size: Tokens.Font.categoryLabel))
                     .bold()
                     .foregroundStyle(Color.brownAccent)
                     
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: Tokens.Spacing.md) {
                         Text("Refactor Identity Module")
-                            .font(Font.custom("Inter-Bold", size: 18))
+                            .font(.inter(.bold, size: Tokens.Font.titleLarge))
                             .foregroundStyle(Color.defaultText)
                         Text("Clean up the core authentication logic for the next sprint.")
-                            .font(Font.custom("Inter-Regular", size: 14))
+                            .font(.inter(.regular, size: Tokens.Font.titleSmall))
                             .foregroundStyle(Color.defaultText)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,27 +42,27 @@ struct MainCard: View {
                         HStack {
                             Image(systemName: "clock")
                             Text("1h 30m")
-                               
+
                         }
-                        .font(Font.custom("Inter-bold", size: 12))
+                        .font(.inter(.bold, size: Tokens.Font.metadata))
                         .foregroundStyle(Color.greyDarkText)
                         HStack {
                             Image(systemName: "exclamationmark")
                             Text("High Priority")
                         }
-                        .font(Font.custom("Inter-bold", size: 12))
+                        .font(.inter(.bold, size: Tokens.Font.metadata))
                         .bold()
                         Spacer()
                     }.foregroundStyle(Color.greyDarkText)
                 }
-                .padding(.horizontal, 25)
-                .padding(.vertical, 20)
+                .padding(.horizontal, Tokens.Card.mainCardHPadding)
+                .padding(.vertical, Tokens.Card.mainCardVPadding)
 
             }
             .fixedSize(horizontal: false, vertical: true)
-            .frame(width: geo.size.width * 0.90)
+            .frame(width: geo.size.width * Tokens.Card.mainCardWidth)
             .background(Color.card)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .clipShape(RoundedRectangle(cornerRadius: Tokens.Radius.md))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
