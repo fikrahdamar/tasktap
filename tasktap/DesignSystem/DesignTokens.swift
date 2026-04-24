@@ -89,5 +89,15 @@ enum DesignTokens {
         static let titleLarge: CGFloat = 18     // main headings
         static let titleSmall: CGFloat = 14     // descriptions
         static let metadata: CGFloat = 12       // metadata/secondary text
+        static let icon: CGFloat = 24
+    }
+    
+    // MARK: - Rounded Icon Bg
+    /// Circle Icon background sizing
+    enum CricleIcon {
+        static let sm: CGFloat = 24
+        static let md: CGFloat = 48
+        static let lg: CGFloat = 56
+        static let xl: CGFloat = 64
     }
 }
