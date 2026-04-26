@@ -4,7 +4,6 @@ import SwiftUI
 
 /// Month grid with priority-dot indicators per day and a selected-date highlight.
 struct RitualCalendarGrid: View {
-
     let viewModel: RitualViewModel
     let allTasks: [TaskItem]
 
@@ -22,6 +21,7 @@ struct RitualCalendarGrid: View {
     }
 
     // MARK: - Weekday Header
+
     private var weekdayHeader: some View {
         LazyVGrid(columns: columns, spacing: 0) {
             ForEach(weekdays, id: \.self) { day in
@@ -34,6 +34,7 @@ struct RitualCalendarGrid: View {
     }
 
     // MARK: - Day Grid
+
     private var dayGrid: some View {
         let days = viewModel.daysGrid()
         return LazyVGrid(columns: columns, spacing: DesignTokens.Spacing.sm) {
@@ -62,7 +63,6 @@ struct RitualCalendarGrid: View {
 // MARK: - DayCell
 
 struct DayCell: View {
-
     let date: Date
     let tasks: [TaskItem]
     let isSelected: Bool
@@ -73,13 +73,9 @@ struct DayCell: View {
         "\(Calendar.current.component(.day, from: date))"
     }
 
-    private var dots: [Color] {
-        // Up to 3 dots, deduplicated by priority order (high→medium→low)
+    private var dots: [Priority] {
         let priorities: [Priority] = [.high, .medium, .low]
-        return priorities
-            .filter { p in tasks.contains { $0.priority == p } }
-            .prefix(3)
-            .map(\.dotColor)
+        return Array(priorities.filter { p in tasks.contains { $0.priority == p } }.prefix(3))
     }
 
     var body: some View {
@@ -90,7 +86,7 @@ struct DayCell: View {
                     .font(.inter(isSelected ? .bold : .regular, size: 15))
                     .foregroundStyle(labelColor)
                     .frame(width: 36, height: 36)
-                    .background(isSelected ? Color.blackIconAccent : Color.clear)
+                    .background(isSelected ? Color.revertedBase : Color.clear)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
 
                 Color.clear.frame(height: 6)
@@ -105,7 +101,7 @@ struct DayCell: View {
                     HStack(spacing: 3) {
                         ForEach(dots.indices, id: \.self) { i in
                             Circle()
-                                .fill(dots[i])
+                                .fill(isSelected ? dots[i].selectedDotColor : dots[i].dotColor)
                                 .frame(width: 5, height: 5)
                         }
                     }
@@ -113,7 +109,7 @@ struct DayCell: View {
                 }
                 .padding(.vertical, DesignTokens.Spacing.sm)
                 .padding(.horizontal, DesignTokens.Spacing.sm)
-                .background(isSelected ? Color.blackIconAccent : Color.clear)
+                .background(isSelected ? Color.revertedBase : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
@@ -122,10 +118,9 @@ struct DayCell: View {
     }
 
     private var labelColor: Color {
-        if isSelected { return .white }
+        if isSelected { return .revertedDefaultText }
         if !isCurrentMonth { return Color.greyText.opacity(0.4) }
-        if isToday { return .black }
-        return Color.defaultText
+        return Color.primary
     }
 }
 
@@ -134,9 +129,17 @@ struct DayCell: View {
 extension Priority {
     var dotColor: Color {
         switch self {
-        case .high:   return Color.redIconAccent
+        case .high: return Color.redIconAccent
         case .medium: return Color.orangeIconAccent
-        case .low:    return Color.blueIconAccent
+        case .low: return Color.blueIconAccent
+        }
+    }
+
+    var selectedDotColor: Color {
+        switch self {
+        case .high: return Color.revertedRedIconAccent
+        case .medium: return Color.revertedOrangeIconAccent
+        case .low: return Color.revertedBlueIconAccent
         }
     }
 }
@@ -150,15 +153,15 @@ extension Priority {
 
         // All three priority dots
         DayCell(date: .now, tasks: [
-            TaskItem(title: "A", priority: .high,   deadline: .now),
+            TaskItem(title: "A", priority: .high, deadline: .now),
             TaskItem(title: "B", priority: .medium, deadline: .now),
-            TaskItem(title: "C", priority: .low,    deadline: .now),
+            TaskItem(title: "C", priority: .low, deadline: .now),
         ], isSelected: false, isToday: false, isCurrentMonth: true)
 
         // Selected with dots
         DayCell(date: .now, tasks: [
-            TaskItem(title: "A", priority: .high,   deadline: .now),
-            TaskItem(title: "B", priority: .low,    deadline: .now),
+            TaskItem(title: "A", priority: .high, deadline: .now),
+            TaskItem(title: "B", priority: .low, deadline: .now),
         ], isSelected: true, isToday: false, isCurrentMonth: true)
 
         // Today, single dot
