@@ -84,35 +84,41 @@ struct DayCell: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(dayNumber)
-                .font(.inter(isSelected ? .bold : .regular, size: 15))
-                .foregroundStyle(labelColor)
-                .frame(width: 36, height: 36)
-
-            dotRow
-        }
-        .padding(.vertical, dots.isEmpty ? 0 : DesignTokens.Spacing.sm)
-        .padding(.horizontal, DesignTokens.Spacing.sm)
-        .background(isSelected ? Color.black : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .frame(height: 52)
-    }
-
-    private var dotRow: some View {
-        Group {
             if dots.isEmpty {
+                // No dots: small rounded rect behind number only
+                Text(dayNumber)
+                    .font(.inter(isSelected ? .bold : .regular, size: 15))
+                    .foregroundStyle(labelColor)
+                    .frame(width: 36, height: 36)
+                    .background(isSelected ? Color.blackIconAccent : Color.clear)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+
                 Color.clear.frame(height: 6)
             } else {
-                HStack(spacing: 3) {
-                    ForEach(dots.indices, id: \.self) { i in
-                        Circle()
-                            .fill(dots[i])
-                            .frame(width: 5, height: 5)
+                // Has dots: tall pill wraps number + dots together
+                VStack(spacing: 4) {
+                    Text(dayNumber)
+                        .font(.inter(isSelected ? .bold : .regular, size: 15))
+                        .foregroundStyle(labelColor)
+                        .frame(width: 36, height: 36)
+
+                    HStack(spacing: 3) {
+                        ForEach(dots.indices, id: \.self) { i in
+                            Circle()
+                                .fill(dots[i])
+                                .frame(width: 5, height: 5)
+                        }
                     }
+                    .frame(height: 6)
                 }
-                .frame(height: 6)
+                .padding(.vertical, DesignTokens.Spacing.sm)
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .background(isSelected ? Color.blackIconAccent : Color.clear)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
+        .frame(height: 52)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
     }
 
     private var labelColor: Color {
@@ -128,9 +134,9 @@ struct DayCell: View {
 extension Priority {
     var dotColor: Color {
         switch self {
-        case .high:   return Color.darkRedAccent
-        case .medium: return Color.brownAccent
-        case .low:    return Color.darkBlueAccent
+        case .high:   return Color.redIconAccent
+        case .medium: return Color.orangeIconAccent
+        case .low:    return Color.blueIconAccent
         }
     }
 }
