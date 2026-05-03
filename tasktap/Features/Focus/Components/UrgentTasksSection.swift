@@ -10,6 +10,11 @@ private typealias Tokens = DesignTokens
 struct UrgentTasksSection: View {
     let tasks: [TaskItem]
 
+    private let columns = [
+        GridItem(.flexible(), spacing: Tokens.Spacing.lg),
+        GridItem(.flexible(), spacing: Tokens.Spacing.lg)
+    ]
+
     var body: some View {
         VStack(alignment: .leading, spacing: Tokens.Spacing.lg) {
             Text("Urgent Tasks")
@@ -22,12 +27,9 @@ struct UrgentTasksSection: View {
                     .foregroundStyle(Color.greyText)
                     .padding(.vertical, Tokens.Spacing.lg)
             } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: Tokens.Spacing.lg) {
-                        ForEach(tasks) { task in
-                            SmallCard(task: task)
-                                .frame(width: 200)
-                        }
+                LazyVGrid(columns: columns, spacing: Tokens.Spacing.lg) {
+                    ForEach(tasks) { task in
+                        SmallCard(task: task)
                     }
                 }
             }

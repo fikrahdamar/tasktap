@@ -15,21 +15,21 @@ struct FocusView: View {
 
     private let calendar = Calendar.current
 
-    // All tasks with deadline today
+    // All tasks with deadline today (for progress ring)
     private var todayAll: [TaskItem] {
         tasks.filter { calendar.isDateInToday($0.deadline) }
     }
 
-    // Today's incomplete tasks sorted high → low priority
+    // Today's incomplete tasks with deadline still in the future — sorted high → low
     private var priorityTasks: [TaskItem] {
-        todayAll
-            .filter { !$0.isCompleted }
+        tasks
+            .filter { !$0.isCompleted && calendar.isDateInToday($0.deadline) && $0.deadline >= Date() }
             .sorted { $0.priority.rawValue > $1.priority.rawValue }
     }
 
-    // Overdue incomplete tasks (past deadline, any day)
+    // Incomplete tasks where deadline already passed — any day
     private var urgentTasks: [TaskItem] {
-        tasks.filter { !$0.isCompleted && $0.deadline <= Date() }
+        tasks.filter { !$0.isCompleted && $0.deadline < Date() }
     }
 
     // Completed today / total today * 100
@@ -74,31 +74,65 @@ struct FocusView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: TaskItem.self, configurations: config)
 
-    let sampleTasks: [TaskItem] = [
+    let now = Date()
+    let cal = Calendar.current
+
+    // Priority Focus — deadline still ahead today (small offsets, never cross midnight)
+    let upcoming: [TaskItem] = [
         TaskItem(
             title: "Refactor Identity Module",
             taskDescription: "Clean up the core authentication logic for the next sprint.",
             priority: .high,
-            deadline: Date()
+            deadline: cal.date(byAdding: .minute, value: 5, to: now)!
         ),
         TaskItem(
             title: "Quarterly Review",
             taskDescription: "Align current progress with the Monastic Precision goals.",
             priority: .low,
-            deadline: Date(),
+            deadline: cal.date(byAdding: .minute, value: 10, to: now)!,
             repeatFrequency: .weekly
         ),
         TaskItem(
+            title: "Morning Journaling",
+            taskDescription: "Reflect on yesterday and set intention for today.",
+            priority: .medium,
+            deadline: cal.date(byAdding: .minute, value: 15, to: now)!,
+            repeatFrequency: .daily
+        ),
+        TaskItem(
+            title: "Read 30 Pages",
+            taskDescription: "Continue Deep Work by Cal Newport.",
+            priority: .low,
+            deadline: cal.date(byAdding: .minute, value: 20, to: now)!
+        ),
+        TaskItem(
+            title: "Design System Audit",
+            taskDescription: "Review all component tokens against Figma source.",
+            priority: .medium,
+            deadline: cal.date(byAdding: .minute, value: 25, to: now)!
+        ),
+    ]
+
+    // Urgent — already past deadline
+    let overdue: [TaskItem] = [
+        TaskItem(
             title: "Server Migration",
             priority: .high,
-            deadline: Calendar.current.date(byAdding: .hour, value: -1, to: Date())!
+            deadline: cal.date(byAdding: .hour, value: -1, to: now)!
         ),
         TaskItem(
             title: "Client Sync",
             priority: .high,
-            deadline: Calendar.current.date(byAdding: .minute, value: -20, to: Date())!
+            deadline: cal.date(byAdding: .minute, value: -20, to: now)!
+        ),
+        TaskItem(
+            title: "Submit Budget Report",
+            priority: .medium,
+            deadline: cal.date(byAdding: .day, value: -1, to: now)!
         ),
     ]
+
+    let sampleTasks = upcoming + overdue
     sampleTasks.forEach { container.mainContext.insert($0) }
 
     return FocusView()
