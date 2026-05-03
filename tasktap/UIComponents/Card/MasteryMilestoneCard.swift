@@ -14,25 +14,29 @@ private typealias Tokens = DesignTokens
 
 /// Mastery milestone card on identity tabview
 struct MasteryMilestoneCard: View {
+    let icon: String
+    let iconColor: Color
+    let iconBgColor: Color
+    let title: String
+    let subtitle: String
+
     var body: some View {
         GeometryReader { geo in
-            VStack (spacing: Tokens.Spacing.sm) {
+            VStack(spacing: Tokens.Spacing.sm) {
                 ZStack {
                     Circle()
                         .frame(width: Tokens.CricleIcon.md, height: Tokens.CricleIcon.md)
-                        .foregroundStyle(Color.redIconBgAccent)
-                    Image(systemName: "medal")
+                        .foregroundStyle(iconBgColor)
+                    Image(systemName: icon)
                         .font(.inter(.regular, size: Tokens.Font.icon))
-                        .foregroundStyle(Color.redIconAccent)
-                        
+                        .foregroundStyle(iconColor)
                 }
-                Text("7-Day Ritual Master")
+                Text(title)
                     .font(.inter(.bold, size: Tokens.Font.titleLarge))
                     .foregroundStyle(Color.greyDarkText)
-                Text("Consistency Achievement".uppercased())
+                Text(subtitle.uppercased())
                     .font(.inter(.bold, size: Tokens.Font.titleSmall))
                     .foregroundStyle(Color.greyText)
-               
             }
             .padding(Tokens.Card.mainCardHPadding)
             .fixedSize(horizontal: false, vertical: true)
@@ -41,14 +45,18 @@ struct MasteryMilestoneCard: View {
             .clipShape(RoundedRectangle(cornerRadius: Tokens.Radius.card))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-       
     }
 }
 
 #Preview {
     ZStack {
         Color.gray.opacity(0.2).ignoresSafeArea()
-        MasteryMilestoneCard()
+        MasteryMilestoneCard(
+            icon: "medal",
+            iconColor: Color.redIconAccent,
+            iconBgColor: Color.redIconBgAccent,
+            title: "7-Day Ritual Master",
+            subtitle: "Consistency Achievement"
+        )
     }
-    
 }

@@ -15,54 +15,63 @@ private typealias Tokens = DesignTokens
 /// Displays task with left accent bar, title, description, and metadata.
 /// Typically used in Focus view for "Priority Focus" section.
 struct MainCard: View {
+    let task: TaskItem
+
+    private var deadlineLabel: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter.string(from: task.deadline)
+    }
+
     var body: some View {
         GeometryReader { geo in
             HStack {
                 RoundedRectangle(cornerRadius: Tokens.AccentBar.cornerRadius)
-                    .fill(Color.brownAccent)
+                    .fill(task.priority.accentColor)
                     .frame(width: Tokens.AccentBar.width)
 
                 VStack(spacing: Tokens.Spacing.section) {
 
                     HStack {
-                        Text("DEEP WORK")
+                        Text(task.typeLabel)
                         Spacer()
-                        Image(systemName: "circle.circle")
+                        Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle.circle")
                     }
                     .font(.inter(.medium, size: Tokens.Font.categoryLabel))
                     .bold()
-                    .foregroundStyle(Color.brownAccent)
-                    
+                    .foregroundStyle(task.priority.accentColor)
+
                     VStack(alignment: .leading, spacing: Tokens.Spacing.md) {
-                        Text("Refactor Identity Module")
+                        Text(task.title)
                             .font(.inter(.bold, size: Tokens.Font.titleLarge))
                             .foregroundStyle(Color.defaultText)
-                        Text("Clean up the core authentication logic for the next sprint.")
-                            .font(.inter(.regular, size: Tokens.Font.titleSmall))
-                            .foregroundStyle(Color.defaultText)
+                        if let desc = task.taskDescription {
+                            Text(desc)
+                                .font(.inter(.regular, size: Tokens.Font.titleSmall))
+                                .foregroundStyle(Color.defaultText)
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     HStack {
                         HStack {
                             Image(systemName: "clock")
-                            Text("1h 30m")
-
+                            Text(deadlineLabel)
                         }
                         .font(.inter(.bold, size: Tokens.Font.metadata))
                         .foregroundStyle(Color.greyDarkText)
                         HStack {
                             Image(systemName: "exclamationmark")
-                            Text("High Priority")
+                            Text(task.priority.displayLabel)
                         }
                         .font(.inter(.bold, size: Tokens.Font.metadata))
                         .bold()
                         Spacer()
-                    }.foregroundStyle(Color.greyDarkText)
+                    }
+                    .foregroundStyle(Color.greyDarkText)
                 }
                 .padding(.horizontal, Tokens.Card.mainCardHPadding)
                 .padding(.vertical, Tokens.Card.mainCardVPadding)
-
             }
             .fixedSize(horizontal: false, vertical: true)
             .frame(width: geo.size.width * Tokens.Card.mainCardWidth)
@@ -74,9 +83,14 @@ struct MainCard: View {
 }
 
 #Preview {
+    let task = TaskItem(
+        title: "Refactor Identity Module",
+        taskDescription: "Clean up the core authentication logic for the next sprint.",
+        priority: .high,
+        deadline: Date()
+    )
     ZStack {
         Color.gray.opacity(0.2).ignoresSafeArea()
-
-        MainCard()
+        MainCard(task: task)
     }
 }

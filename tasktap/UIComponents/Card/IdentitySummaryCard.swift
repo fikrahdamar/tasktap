@@ -15,15 +15,20 @@ private typealias Tokens = DesignTokens
 /// Shows icon, value, and label in a compact card format.
 /// Used in Identity screen stats bento grid.
 struct IdentitySummaryCard: View {
+    let icon: String
+    let iconColor: Color
+    let value: String
+    let label: String
+
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading, spacing: Tokens.Spacing.md) {
-                Image(systemName: "flame")
-                    .foregroundStyle(Color.redIconAccent)
-                Text("14 Days")
+                Image(systemName: icon)
+                    .foregroundStyle(iconColor)
+                Text(value)
                     .foregroundStyle(Color.defaultText)
                     .font(.inter(.bold, size: 24))
-                Text("Current Streak".uppercased())
+                Text(label.uppercased())
                     .foregroundStyle(Color.greyText)
                     .font(.inter(.bold, size: Tokens.Font.categoryLabel))
             }
@@ -40,6 +45,11 @@ struct IdentitySummaryCard: View {
 #Preview {
     ZStack {
         Color.gray.opacity(0.2).ignoresSafeArea()
-        IdentitySummaryCard()
+        IdentitySummaryCard(
+            icon: "flame",
+            iconColor: Color.redIconAccent,
+            value: "14 Days",
+            label: "Current Streak"
+        )
     }
 }
