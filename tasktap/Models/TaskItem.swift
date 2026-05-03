@@ -40,6 +40,8 @@ final class TaskItem: Equatable {
     var notes: String?
 
     var isCompleted: Bool
+    var completedAt: Date?
+    var postponeCount: Int
     var createdAt: Date
 
     var repeatFrequency: RepeatFrequency = RepeatFrequency.none
@@ -59,7 +61,9 @@ final class TaskItem: Equatable {
          repeatInterval: Int = 1,
          repeatEndDate: Date? = nil,
          attachment: Data? = nil,
-         isCompleted: Bool = false)
+         isCompleted: Bool = false,
+         completedAt: Date? = nil,
+         postponeCount: Int = 0)
     {
         self.id = UUID()
         self.title = title
@@ -69,6 +73,8 @@ final class TaskItem: Equatable {
         self.notes = notes
 
         self.isCompleted = isCompleted
+        self.completedAt = completedAt
+        self.postponeCount = postponeCount
         self.createdAt = .now
 
         self.originalDeadline = deadline
