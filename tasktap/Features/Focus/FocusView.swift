@@ -12,6 +12,7 @@ private typealias Tokens = DesignTokens
 
 struct FocusView: View {
     @Query private var tasks: [TaskItem]
+    @State private var showNavTitle = false
 
     private let calendar = Calendar.current
 
@@ -50,14 +51,20 @@ struct FocusView: View {
                 .padding(.horizontal, Tokens.Spacing.lg)
                 .padding(.bottom, Tokens.TabBar.height)
             }
+            .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                geometry.contentOffset.y
+            } action: { _, newValue in
+                showNavTitle = newValue > -10
+            }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Daily Focus")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Text("TaskTap")
-                        .font(.inter(.black, size: 20))
+                ToolbarItem(placement: .principal) {
+                    Text("Daily Focus")
+                        .font(.headline)
                         .foregroundStyle(Color.defaultText)
+                        .opacity(showNavTitle ? 1 : 0)
+                        .animation(.easeInOut(duration: 0.2), value: showNavTitle)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { } label: {
