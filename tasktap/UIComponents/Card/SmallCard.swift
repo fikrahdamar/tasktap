@@ -52,6 +52,7 @@ struct SmallCard: View {
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.cardSmall)
         .clipShape(RoundedRectangle(cornerRadius: Tokens.Radius.cardSm))
+        .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 3)
     }
 }
 

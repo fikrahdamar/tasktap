@@ -35,5 +35,6 @@ struct FocusHeroSection: View {
                 animationDuration: 0.6
             )
         }
+        .padding(.bottom, Tokens.Spacing.sm)
     }
 }

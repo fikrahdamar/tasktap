@@ -49,6 +49,7 @@ struct FocusView: View {
                     UrgentTasksSection(tasks: urgentTasks)
                 }
                 .padding(.horizontal, Tokens.Spacing.lg)
+                .padding(.top, Tokens.Spacing.lg)
                 .padding(.bottom, Tokens.TabBar.height)
             }
             .onScrollGeometryChange(for: CGFloat.self) { geometry in
